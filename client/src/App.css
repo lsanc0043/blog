@@ -1,3 +1,78 @@
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
 .App {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.add-post {
+  display: flex;
+  align-self: center;
+  width: 500px;
+  flex-direction: column;
+}
+
+input[type=text], textarea {
+  padding: 10px;
+  margin: 10px 0px;
+  border: 0;
+  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.116);
+  border-radius:10px;
+  outline: none;
+}
+
+input[type=text]:hover, textarea:hover {
+  animation: hover-effect;
+  animation-duration: 1s;
+}
+
+@keyframes hover-effect {
+  from {box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.275)}
+  to {box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.275)}
+}
+
+input:focus, textarea:focus {
+  border: 2px solid rgb(74, 217, 239);
+  box-shadow: 0 0 15px 4px rgba(47, 175, 201, 0.526);
+}
+
+textarea::-webkit-input-placeholder {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+textarea {
+  resize: none;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+input[type=submit], button {
+  border: none;
+  padding: 10px;
+  margin: 0px 5px;
+  border-radius: 10px;
+}
+
+input[type=submit]:hover, button:hover {
+  box-shadow: 0 0 15px 4px rgba(27, 119, 35, 0.508)
+}
+
+.nav {
+  display: flex;
+  justify-content: space-around;
+  /* width: 50px; */
+}
+
+.inactive:hover {
+  box-shadow:none;
+  cursor: not-allowed;
+}
+
+.pfp {
+  display: inline-block;
+  width: 200px;
+  border-radius: 50%;
 }
