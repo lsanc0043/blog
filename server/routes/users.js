@@ -21,6 +21,7 @@ route.post("/", async (req, res) => {
     firstname: req.body.firstname,
     lastname: req.body.lastname,
   };
+  console.log(userInfo);
   try {
     if (userInfo.pfp !== "") {
       const createdUser = await db.any(
@@ -47,47 +48,60 @@ route.post("/", async (req, res) => {
       res.send(createdUser);
     }
   } catch (e) {
-    console.log("post users", e);
+    console.log("post user", e);
     res.status(400).send({ e });
   }
 });
 
-// route.put("/:id", async (req, res) => {
-//   const id = Number(req.params.id);
-//   const postInfo = {
-//     poster: req.body.poster,
-//     title: req.body.title,
-//     description: req.body.description,
-//     content: req.body.content,
-//     image: req.body.image,
-//   };
-//   console.log("line 58, put request", [id, postInfo]);
-//   try {
-//     await db.one(
-//       "UPDATE posts SET poster=$1, title=$2, description=$3, content=$4, image=$5, last_updated=CURRENT_TIMESTAMP WHERE id=$6",
-//       [
-//         postInfo.poster,
-//         postInfo.title,
-//         postInfo.description,
-//         postInfo.content,
-//         postInfo.image,
-//         id,
-//       ]
-//     );
-//   } catch (e) {
-//     console.log("put", e);
-//     res.status(400).send({ e });
-//   }
-// });
+route.put("/:id", async (req, res) => {
+  const id = Number(req.params.id);
+  const userInfo = {
+    username: req.body.username,
+    password: req.body.password,
+    pfp: req.body.pfp,
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
+  };
+  console.log("line 64, put request", [id, userInfo]);
+  try {
+    if (userInfo.pfp !== "") {
+      await db.any(
+        "UPDATE users SET username=$1, password=$2, firstname=$3, lastname=$4, pfp=$5 WHERE id=$6",
+        [
+          userInfo.username,
+          userInfo.password,
+          userInfo.firstname,
+          userInfo.lastname,
+          userInfo.pfp,
+          id,
+        ]
+      );
+    } else {
+      await db.any(
+        "UPDATE users SET username=$1, password=$2, firstname=$3, lastname=$4 WHERE id=$5",
+        [
+          userInfo.username,
+          userInfo.password,
+          userInfo.firstname,
+          userInfo.lastname,
+          id,
+        ]
+      );
+    }
+  } catch (e) {
+    console.log("put user", e);
+    res.status(400).send({ e });
+  }
+});
 
-// route.delete("/:id", (req, res) => {
-//   const id = Number(req.params.id);
-//   try {
-//     const deletedPost = db.query("DELETE FROM posts WHERE id=$1", [id]);
-//   } catch (e) {
-//     console.log("delete", e);
-//     res.status(400).send({ e });
-//   }
-// });
+route.delete("/:id", (req, res) => {
+  const id = Number(req.params.id);
+  try {
+    const deletedUser = db.query("DELETE FROM users WHERE id=$1", [id]);
+  } catch (e) {
+    console.log("delete user", e);
+    res.status(400).send({ e });
+  }
+});
 
 export default route;

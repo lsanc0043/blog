@@ -48,19 +48,27 @@ route.put("/:id", async (req, res) => {
     content: req.body.content,
     image: req.body.image,
   };
+  const likes = req.body.likes;
   console.log("line 58, put request", [id, postInfo]);
   try {
-    await db.one(
-      "UPDATE posts SET poster=$1, title=$2, description=$3, content=$4, image=$5, last_updated=CURRENT_TIMESTAMP WHERE id=$6",
-      [
-        postInfo.poster,
-        postInfo.title,
-        postInfo.description,
-        postInfo.content,
-        postInfo.image,
-        id,
-      ]
-    );
+    if (likes === true) {
+      const likes = (
+        await db.any("SELECT likes FROM posts WHERE id=$1", [id])
+      )[0].likes;
+      await db.one("UPDATE posts SET likes=$1 WHERE id=$2", [likes + 1, id]);
+    } else {
+      await db.one(
+        "UPDATE posts SET poster=$1, title=$2, description=$3, content=$4, image=$5, last_updated=CURRENT_TIMESTAMP WHERE id=$6",
+        [
+          postInfo.poster,
+          postInfo.title,
+          postInfo.description,
+          postInfo.content,
+          postInfo.image,
+          id,
+        ]
+      );
+    }
   } catch (e) {
     console.log("edit posts", e);
     res.status(400).send({ e });

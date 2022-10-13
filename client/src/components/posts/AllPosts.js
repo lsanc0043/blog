@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Post from "./PostCard";
 import AddPost from "./AddPost";
 
-const AllPosts = () => {
+const AllPosts = ({ path }) => {
   const user = "Linda Sanchez";
   const [postInfo, setPostInfo] = useState([]);
   const [refresh, setRefresh] = useState("");
@@ -16,6 +16,15 @@ const AllPosts = () => {
     image: "",
   });
 
+  const randomPage = () => {
+    const random = Math.round(Math.random() * (postInfo.length - 1));
+    if (currentPost === random) {
+      randomPage();
+    } else {
+      setCurrentPost(random);
+    }
+  };
+
   const getPosts = async () => {
     const response = await fetch("http://localhost:4000/posts");
     const data = await response.json();
@@ -27,7 +36,15 @@ const AllPosts = () => {
     if (refresh === "post") {
       setCurrentPost(postInfo.length - 1);
     }
+    // eslint-disable-next-line
   }, [refresh, postInfo, editMode]);
+
+  useEffect(() => {
+    if (path > 0 && postInfo.length > 0) {
+      randomPage();
+    }
+    // eslint-disable-next-line
+  }, [path]);
 
   const set = (keyProp) => {
     return ({ target: { value } }) => {
@@ -52,35 +69,44 @@ const AllPosts = () => {
       postInfo.filter((post) => post.id !== Number(e.currentTarget.value))
     );
   };
-  
+
   return (
-    <>
-      {postInfo.map((post, index) => {
-        if (currentPost === index) {
-          if (post.id === newPost.id) {
-            return (
-              <AddPost
-                key={index}
-                setRefresh={setRefresh}
-                set={set}
-                newPost={newPost}
-                setNewPost={setNewPost}
-                editMode={editMode}
-                setEditMode={setEditMode}
-              />
-            );
+    <div className="all-posts">
+      {postInfo === [] ? (
+        <></>
+      ) : (
+        <>
+          {
+            // eslint-disable-next-line
+            postInfo.map((post, index) => {
+              if (currentPost === index) {
+                if (post.id === newPost.id) {
+                  return (
+                    <AddPost
+                      key={index}
+                      setRefresh={setRefresh}
+                      set={set}
+                      newPost={newPost}
+                      setNewPost={setNewPost}
+                      editMode={editMode}
+                      setEditMode={setEditMode}
+                    />
+                  );
+                }
+                return (
+                  <Post
+                    key={index}
+                    post={post}
+                    setRefresh={setRefresh}
+                    removePost={removePost}
+                    editData={editData}
+                  />
+                );
+              }
+            })
           }
-          return (
-            <Post
-              key={index}
-              post={post}
-              setRefresh={setRefresh}
-              removePost={removePost}
-              editData={editData}
-            />
-          );
-        }
-      })}
+        </>
+      )}
       {currentPost === postInfo.length ? (
         <AddPost
           setRefresh={setRefresh}
@@ -91,11 +117,14 @@ const AllPosts = () => {
       ) : (
         <></>
       )}
-      <div className="nav">
+      <div
+        className="slider-buttons"
+        style={{ display: path > 0 ? "none" : "flex" }}
+      >
         <button
           onClick={
             currentPost === 0
-              ? ""
+              ? () => {}
               : () => {
                   setCurrentPost(currentPost - 1);
                   setNewPost("");
@@ -108,7 +137,7 @@ const AllPosts = () => {
         <button
           onClick={
             currentPost === postInfo.length
-              ? ""
+              ? () => {}
               : () => {
                   setCurrentPost(currentPost + 1);
                   setNewPost("");
@@ -119,7 +148,7 @@ const AllPosts = () => {
           Next
         </button>
       </div>
-    </>
+    </div>
   );
 };
 

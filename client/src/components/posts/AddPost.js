@@ -1,14 +1,14 @@
 const AddPost = ({ setRefresh, set, setNewPost, newPost, editMode }) => {
-  const entry = {
-    poster: "Linda Sanchez",
-    title: "Title of Second Post",
-    description:
-      "Description of second post. This is the second post I've made to my blog.",
-    content:
-      "Hello all, this is the second post I will have made! Thank you for reading and supporting.",
-    image:
-      "https://i1.sndcdn.com/artworks-RdXyxcg62UePiGaW-vQHy7g-t500x500.jpg",
-  };
+  // const entry = {
+  //   poster: "Linda Sanchez",
+  //   title: "Title of Second Post",
+  //   description:
+  //     "Description of second post. This is the second post I've made to my blog.",
+  //   content:
+  //     "Hello all, this is the second post I will have made! Thank you for reading and supporting.",
+  //   image:
+  //     "https://i1.sndcdn.com/artworks-RdXyxcg62UePiGaW-vQHy7g-t500x500.jpg",
+  // };
 
   const makePost = async (e) => {
     console.log(newPost);
@@ -27,7 +27,7 @@ const AddPost = ({ setRefresh, set, setNewPost, newPost, editMode }) => {
           body: JSON.stringify(newPost),
         }
       );
-      const data = await response.json();
+      await response.json();
       setNewPost({
         poster: "",
         title: "",
@@ -44,7 +44,7 @@ const AddPost = ({ setRefresh, set, setNewPost, newPost, editMode }) => {
         },
         body: JSON.stringify(newPost),
       });
-      const data = await response.json();
+      await response.json();
       setNewPost({
         poster: "",
         title: "",
@@ -76,7 +76,7 @@ const AddPost = ({ setRefresh, set, setNewPost, newPost, editMode }) => {
         value={newPost.description}
         placeholder="Description"
         onChange={set("description")}
-      />{" "}
+      />
       <br />
       <textarea
         type="text"
@@ -87,6 +87,7 @@ const AddPost = ({ setRefresh, set, setNewPost, newPost, editMode }) => {
         placeholder="Start writing your post here..."
         onChange={set("content")}
       />
+
       <br />
       <input type="submit" value={editMode ? "Update!" : "Post!"} />
     </form>

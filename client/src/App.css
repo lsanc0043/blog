@@ -2,30 +2,74 @@
   box-sizing: border-box;
 }
 
+body {
+  background-color: rgb(107, 91, 52);
+  font-family: 'Mitr', sans-serif;
+  color: black;
+}
+
 .App {
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin: 0px 90px;
 }
+
+button {
+  font-size: 12px;
+}
+
+/* all posts */
+
+.all-posts, .all-users, .home-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 30px 0px;
+  padding: 30px 40px;
+  padding-bottom: 30px;
+  border-radius: 10px;
+  background-color: rgb(179, 152, 116);
+  text-align: left;
+}
+
+.post {
+  font-size: 18px;
+  white-space: pre-wrap;
+}
+
+.slider-buttons {
+  display: flex;
+  justify-content: space-around;
+}
+
+img {
+  margin: 30px;
+}
+
+/* add post form */
 
 .add-post {
   display: flex;
+  justify-content: center;
   align-self: center;
   width: 500px;
   flex-direction: column;
 }
 
-input[type=text], textarea {
+input[type=text], input[type=password], textarea {
+  font-family: Arial, Helvetica, sans-serif;
   padding: 10px;
   margin: 10px 0px;
   border: 0;
   box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.116);
   border-radius:10px;
   outline: none;
+  font-size: 14px;
 }
 
-input[type=text]:hover, textarea:hover {
+input[type=text]:hover, input[type=password]:hover, textarea:hover {
   animation: hover-effect;
   animation-duration: 1s;
 }
@@ -40,8 +84,8 @@ input:focus, textarea:focus {
   box-shadow: 0 0 15px 4px rgba(47, 175, 201, 0.526);
 }
 
-textarea::-webkit-input-placeholder {
-  font-family: Arial, Helvetica, sans-serif;
+textarea::-webkit-input-placeholder, input[type=text]::-webkit-input-placeholder, input[type=password]::-webkit-input-placeholder {
+  font-size: 14px;
 }
 
 textarea {
@@ -49,21 +93,16 @@ textarea {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-input[type=submit], button {
+input[type=submit], button, .nav-bar{
   border: none;
   padding: 10px;
   margin: 0px 5px;
   border-radius: 10px;
+  font-family: 'Silkscreen', cursive;
 }
 
 input[type=submit]:hover, button:hover {
   box-shadow: 0 0 15px 4px rgba(27, 119, 35, 0.508)
-}
-
-.nav {
-  display: flex;
-  justify-content: space-around;
-  /* width: 50px; */
 }
 
 .inactive:hover {
@@ -71,8 +110,111 @@ input[type=submit]:hover, button:hover {
   cursor: not-allowed;
 }
 
+/* user display */
+
 .pfp {
   display: inline-block;
   width: 200px;
   border-radius: 50%;
+}
+
+/* nav bar */
+
+.nav-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  background-color: rgb(179, 152, 116);
+  margin: 0;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 10px;
+  font-family: 'Silkscreen', cursive
+}
+
+a {
+  text-decoration: none;
+  color: black;
+  outline: none;
+  border: none;
+  background-color: none;
+  font-size: 14px;
+}
+
+a:active {
+  background-color: rgb(135, 130, 116) !important;
+}
+
+.nav-tab, .likes {
+  background-color: rgb(179, 152, 116);
+  padding: 0;
+  font-size: 20px;
+}
+
+.nav-tab:hover, .likes:hover {
+  box-shadow: none;
+  color: white;
+}
+
+.settings, .settings:hover, .settings:focus, .settings:active {
+  background-color: rgb(107, 91, 52) !important;
+  box-shadow: none !important;
+  border: none !important;
+  color: black !important;
+}
+
+.login-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+/* modals */
+
+.modal-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+}
+
+path {
+  stroke-linecap: round;
+}
+
+.ex {
+  stroke: red;
+  stroke-width: 1.5;
+}
+
+.checks {
+  stroke:currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke: green;
+  stroke-linejoin: round;
+  stroke-dasharray: 18;
+  stroke-dashoffset: 18;
+  animation: draw 0.25s forwards 0.25s;
+}
+
+@keyframes draw { 
+  to { stroke-dashoffset: 0 } 
+}
+
+.pw-requirements {
+  text-align: right;
+  font-size: 15px;
+}
+
+.fa-eye {
+  margin-left: 7px;
+}
+
+.fa-eye:hover {
+  color: red;
 }
