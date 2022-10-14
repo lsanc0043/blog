@@ -54,6 +54,8 @@ function App() {
                 action={0}
                 validLogin={validLogin}
                 loggedUser={loggedUser}
+                setUser={setUser}
+                setCurrentTab={setCurrentTab}
               />
             );
           case "Add Post":
@@ -62,6 +64,8 @@ function App() {
                 action={"addPost"}
                 validLogin={validLogin}
                 loggedUser={loggedUser}
+                setUser={setUser}
+                setCurrentTab={setCurrentTab}
               />
             );
           case "User":
@@ -88,6 +92,8 @@ function App() {
                 action={count}
                 validLogin={validLogin}
                 loggedUser={loggedUser}
+                setUser={setUser}
+                setCurrentTab={setCurrentTab}
               />
             );
           case "Specific Post":
@@ -96,6 +102,16 @@ function App() {
                 action={specificPage.toString()}
                 validLogin={validLogin}
                 loggedUser={loggedUser}
+                setUser={setUser}
+                setCurrentTab={setCurrentTab}
+              />
+            );
+          case "Other Users":
+            return (
+              <OtherUsers
+                user={user}
+                setCurrentTab={setCurrentTab}
+                setSpecificPage={setSpecificPage}
               />
             );
           default:

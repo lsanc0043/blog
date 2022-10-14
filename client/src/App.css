@@ -3,7 +3,9 @@
 }
 
 body {
-  background-color: rgb(107, 91, 52);
+  /* background-color: rgb(107, 91, 52); */
+  /* background-color: #5b92c9; */
+  background: linear-gradient(-45deg, #d9b587, #dd6b8e, #72a8c7, #4ec76e);
   font-family: 'Mitr', sans-serif;
   color: black;
 }
@@ -20,9 +22,33 @@ button {
   font-size: 12px;
 }
 
+.blog-title {
+  overflow: hidden; /* Ensures the content is not revealed until the animation */
+  border-right: 2px solid rgb(106, 187, 200); /* The typwriter cursor */
+  white-space: nowrap; /* Keeps the content on a single line */
+  margin: -30 auto; /* Gives that scrolling effect as the typing happens */
+  letter-spacing: 2px; /* Adjust as needed */
+  animation: 
+    typing 3.5s steps(40, end),
+    blink-caret .75s step-end infinite;
+}
+
+/* The typing effect */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 70% }
+}
+
+/* The typewriter cursor effect */
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: rgb(97, 152, 185); }
+}
+
 /* all posts */
 
 .all-posts, .all-users, .home-page, .user-posts, .other-users {
+  font-size: 80%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -30,17 +56,40 @@ button {
   padding: 30px 40px;
   padding-bottom: 30px;
   border-radius: 10px;
-  background-color: rgb(179, 152, 116);
+  background-color: #76a5da;
   text-align: left;
+  box-shadow: 0 0 15px 4px rgba(255, 255, 255, 0.508)
 }
 
 .page-header {
-  color: rgb(213, 104, 104);
+  color: rgb(255, 255, 255);
   text-shadow: -2px 2px rgb(0, 0, 0);
 }
 
 .title {
+  /* -webkit-text-fill-color: rgb(203, 98, 98); /* Will override color (regardless of order) */
+  /* -webkit-text-stroke-width: 1px; */
+  /* -webkit-text-stroke-color: black; */
+  color: white;
+  padding-left: 10px;
+  background: linear-gradient(-45deg, #d9b587, #dd6b8e, #72a8c7, #4ec76e);
+  background-size: 200% 200%;
+  /* -webkit-text-stroke: 8px transparent; */
   text-shadow: -2px 1px rgb(0, 0, 0);
+  border-radius: 10px;
+  border: solid 1px;
+}
+
+.title:hover {
+  animation: move-background;
+  animation-duration: 5s;
+  /* background: linear-gradient(-45deg, #dd6b8e, #72a8c7, #4ec76e, #d9b587); */
+}
+
+@keyframes move-background { 
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
 }
 
 .post, .user {
@@ -66,7 +115,7 @@ button {
 
 img {
   margin-left: 30px;
-  width: 400px;
+  width: 300px;
 }
 
 .edit-delete {
@@ -127,7 +176,7 @@ input[type=submit], button, .nav-bar{
 }
 
 input[type=submit]:hover, button:hover {
-  box-shadow: 0 0 15px 4px rgba(27, 119, 35, 0.508)
+  box-shadow: 0 0 15px 4px rgba(255, 255, 255, 0.508)
 }
 
 .inactive:hover {
@@ -151,7 +200,8 @@ input[type=submit]:hover, button:hover {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  background-color: rgb(179, 152, 116);
+  background-color: #76a5da;
+  box-shadow: 0 0 15px 4px rgba(255, 255, 255, 0.508);
   margin: 0;
 }
 
@@ -178,7 +228,8 @@ a:active {
 }
 
 .nav-tab, .likes, .see-more {
-  background-color: rgb(179, 152, 116);
+  /* background-color: rgb(179, 152, 116); */
+  background-color: #76a5da; 
   padding: 0;
   font-size: 20px;
 }
@@ -189,7 +240,8 @@ a:active {
 }
 
 .settings, .settings:hover, .settings:focus, .settings:active {
-  background-color: rgb(107, 91, 52) !important;
+  /* background-color: rgb(107, 91, 52) !important; */
+  background-color: #5b92c9 !important; 
   box-shadow: none !important;
   border: none !important;
   color: black !important;
@@ -244,4 +296,8 @@ path {
 
 .fa-eye:hover {
   color: red;
+}
+
+.fa-heart {
+  color: rgb(229, 229, 237)
 }

@@ -2,7 +2,13 @@ import { useState, useEffect } from "react";
 import Post from "./PostCard";
 import AddEditPost from "./AddEditPost";
 
-const AllPosts = ({ action, validLogin, loggedUser }) => {
+const AllPosts = ({
+  action,
+  validLogin,
+  loggedUser,
+  setUser,
+  setCurrentTab,
+}) => {
   const [allPosts, setAllPosts] = useState([]);
   const [currentPost, setCurrentPost] = useState(0);
   const [seeMore, setSeeMore] = useState("");
@@ -171,6 +177,8 @@ const AllPosts = ({ action, validLogin, loggedUser }) => {
                   removePost={removePost}
                   editData={editData}
                   userInfo={userInfo}
+                  setUser={setUser}
+                  setCurrentTab={setCurrentTab}
                 />
               );
             }

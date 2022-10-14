@@ -314,13 +314,13 @@ const LoginOrRegister = ({
           </Button>
         </Modal.Footer>
       </Modal>
-      <h1>I Like Big Books and I Cannot Lie</h1>
+      <h1 className="blog-title">I Like Big Books and I Cannot Lie</h1>
       <div>
         {validLogin ? (
           <>
             <div className="login-bar">
               Welcome,&nbsp;
-              <span style={{ color: "lightblue" }}>{loginInfo.username}</span>
+              <span style={{ color: "white" }}>{loginInfo.username}</span>
               <Dropdown>
                 <Dropdown.Toggle className="settings">
                   <i className="fa fa-cog" aria-hidden="true"></i>

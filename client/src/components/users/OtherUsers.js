@@ -13,7 +13,7 @@ const OtherUsers = ({ user, setCurrentTab, setSpecificPage }) => {
   const getPosts = async () => {
     const response = await fetch("http://localhost:4000/posts");
     const data = await response.json();
-    setUserPosts(data.filter((val) => val.user_id === oneUser.id));
+    setUserPosts(data.filter((val) => val.username === oneUser.username));
   };
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const OtherUsers = ({ user, setCurrentTab, setSpecificPage }) => {
 
   useEffect(() => {
     getPosts();
-  }, []);
+  }, [userPosts]);
 
   return (
     <div className="other-users">

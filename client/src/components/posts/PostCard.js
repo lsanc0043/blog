@@ -6,8 +6,8 @@ const Post = ({
   editData,
   removePost,
   userInfo,
-  //   setUser,
-  //   setCurrentTab,
+  setUser,
+  setCurrentTab,
 }) => {
   const [show, setShow] = useState(false);
   const [faves, setFaves] = useState([]);
@@ -98,7 +98,16 @@ const Post = ({
       <h6>
         {`Last Updated on: ${new Date(
           post.last_updated
-        ).toLocaleString()} | By ${post.username} | `}
+        ).toLocaleString()} | By `}{" "}
+        <button
+          className="user-name"
+          onClick={() => {
+            setUser(post.username);
+            setCurrentTab("Other Users");
+          }}
+        >
+          {post.username}
+        </button>
         <button onClick={addLikes} className="likes" value={post.id}>
           <i
             className={
