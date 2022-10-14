@@ -1,8 +1,15 @@
 import { useState, useEffect } from "react";
-import LoginOrRegister from "./LoginOrRegister";
+import LoginOrRegister from "./LoginOrRegister.js";
 
-const NavBar = ({ setCount, count, setCurrentTab }) => {
-  const tabs = ["Home", "Posts", "Users", "Get a Random Post"];
+const NavBar = ({
+  setCount,
+  count,
+  setCurrentTab,
+  checkLogin,
+  userInfo,
+  logout,
+}) => {
+  const tabs = ["Posts", "Add Post", "Get a Random Post"];
   const [allUsers, setAllUsers] = useState([]);
 
   const getUsers = async () => {
@@ -17,7 +24,13 @@ const NavBar = ({ setCount, count, setCurrentTab }) => {
 
   return (
     <>
-      <LoginOrRegister allUsers={allUsers}/>
+      <LoginOrRegister
+        allUsers={allUsers}
+        checkLogin={checkLogin}
+        userInfo={userInfo}
+        setCurrentTab={setCurrentTab}
+        logout={logout}
+      />
       <div className="nav-bar">
         {tabs.map((tab, index) => {
           return (

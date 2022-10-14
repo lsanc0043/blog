@@ -1,9 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Dropdown from "react-bootstrap/Dropdown";
 
-const LoginOrRegister = ({ allUsers }) => {
+const LoginOrRegister = ({
+  allUsers,
+  checkLogin,
+  userInfo,
+  setCurrentTab,
+  logout,
+}) => {
   const [show, setShow] = useState(false);
   const [login, setLogin] = useState(false);
   const [register, setRegister] = useState(false);
@@ -23,13 +29,33 @@ const LoginOrRegister = ({ allUsers }) => {
     setShow(true);
     setLogin(true);
     setRegister(false);
+    setError("");
   };
 
   const registerModal = () => {
     setShow(true);
     setLogin(false);
     setRegister(true);
+    setError("");
   };
+
+  const logoutAccount = () => {
+    setValidLogin(false);
+    checkLogin(false);
+    setCurrentTab("");
+    setLoginInfo({
+      fullname: "",
+      username: "",
+      password: "",
+      confirmPassword: "",
+    });
+  };
+
+  useEffect(() => {
+    if (logout) {
+      logoutAccount();
+    }
+  }, [logout]);
 
   const set = (keyProp) => {
     if (register) {
@@ -63,7 +89,7 @@ const LoginOrRegister = ({ allUsers }) => {
   };
 
   const submitInfo = async () => {
-    console.log(loginInfo);
+    // console.log(loginInfo);
     if (login && !register) {
       const user = allUsers.filter(
         (eachUser) =>
@@ -73,13 +99,15 @@ const LoginOrRegister = ({ allUsers }) => {
       if (user.length > 0) {
         setShow(false);
         setValidLogin(true);
+        checkLogin(true);
+        userInfo(user[0]);
       } else {
         if (
           !allUsers
             .map((eachUser) => eachUser.username)
             .includes(loginInfo.username)
         ) {
-          setError("Please enter a valid email or ");
+          setError("Please enter a valid username or ");
         }
         if (
           allUsers
@@ -148,7 +176,7 @@ const LoginOrRegister = ({ allUsers }) => {
               type="text"
               id="username"
               required
-              minLength={7}
+              minLength={4}
               maxLength={22}
               autoComplete="off"
               value={loginInfo.username}
@@ -276,8 +304,7 @@ const LoginOrRegister = ({ allUsers }) => {
               setError("");
             }}
             style={{
-              display:
-                error === "Please enter a valid email or " ? "block" : "none",
+              display: register ? "none" : "block",
             }}
           >
             Register
@@ -287,7 +314,7 @@ const LoginOrRegister = ({ allUsers }) => {
           </Button>
         </Modal.Footer>
       </Modal>
-      <h1>Linda's Blog</h1>
+      <h1>I Like Big Books and I Cannot Lie</h1>
       <div>
         {validLogin ? (
           <>
@@ -300,13 +327,17 @@ const LoginOrRegister = ({ allUsers }) => {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
-                  <Dropdown.Item onClick={() => console.log("hello")}>
+                  <Dropdown.Item onClick={() => setCurrentTab("User")}>
                     Edit Profile
                   </Dropdown.Item>
-                  <Dropdown.Item>See Posts</Dropdown.Item>
-                  <Dropdown.Item>See Favorites</Dropdown.Item>
+                  <Dropdown.Item onClick={() => setCurrentTab("UserPosts")}>
+                    See Posts
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={() => setCurrentTab("UserFaves")}>
+                    See Favorites
+                  </Dropdown.Item>
                   <Dropdown.Divider />
-                  <Dropdown.Item>Logout</Dropdown.Item>
+                  <Dropdown.Item onClick={logoutAccount}>Logout</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </div>

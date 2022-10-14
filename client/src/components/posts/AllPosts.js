@@ -1,50 +1,34 @@
 import { useState, useEffect } from "react";
 import Post from "./PostCard";
-import AddPost from "./AddPost";
+import AddEditPost from "./AddEditPost";
 
-const AllPosts = ({ path }) => {
-  const user = "Linda Sanchez";
-  const [postInfo, setPostInfo] = useState([]);
-  const [refresh, setRefresh] = useState("");
-  const [editMode, setEditMode] = useState(false);
+const AllPosts = ({ action, validLogin, loggedUser }) => {
+  const [allPosts, setAllPosts] = useState([]);
   const [currentPost, setCurrentPost] = useState(0);
+  const [seeMore, setSeeMore] = useState("");
   const [newPost, setNewPost] = useState({
-    poster: user,
+    userid: "",
     title: "",
     description: "",
     content: "",
     image: "",
   });
-
-  const randomPage = () => {
-    const random = Math.round(Math.random() * (postInfo.length - 1));
-    if (currentPost === random) {
-      randomPage();
-    } else {
-      setCurrentPost(random);
-    }
-  };
+  const [editMode, setEditMode] = useState(false);
+  const [userInfo, setUserInfo] = useState({});
 
   const getPosts = async () => {
     const response = await fetch("http://localhost:4000/posts");
     const data = await response.json();
-    setPostInfo(data);
+    setSeeMore(data.map((post) => post.id).indexOf(Number(action)));
+    setAllPosts(data);
   };
 
   useEffect(() => {
     getPosts();
-    if (refresh === "post") {
-      setCurrentPost(postInfo.length - 1);
+    if (typeof action === "string" && Number(action) !== 0) {
+      setCurrentPost(seeMore);
     }
-    // eslint-disable-next-line
-  }, [refresh, postInfo, editMode]);
-
-  useEffect(() => {
-    if (path > 0 && postInfo.length > 0) {
-      randomPage();
-    }
-    // eslint-disable-next-line
-  }, [path]);
+  }, [allPosts, action]);
 
   const set = (keyProp) => {
     return ({ target: { value } }) => {
@@ -52,12 +36,60 @@ const AllPosts = ({ path }) => {
     };
   };
 
+  const randomPage = () => {
+    setCurrentPost(2);
+    const random = Math.round(Math.random() * (allPosts.length - 1));
+    if (currentPost === random) {
+      randomPage();
+    } else {
+      console.log(random);
+      setCurrentPost(random);
+    }
+  };
+
+  useEffect(() => {
+    if (!isNaN(action) && action > 0) {
+      console.log("random");
+      randomPage();
+      // setCurrentPost(1);
+
+      // console.log(action);
+      // console.log(typeof action);
+    }
+    if (action === "addPost") {
+      setNewPost((originalValues) => ({
+        ...originalValues,
+        title: "",
+        description: "",
+        content: "",
+        image: "",
+      }));
+    }
+    if (action === 0) {
+      setCurrentPost(action);
+    }
+  }, [action]);
+
+  useEffect(() => {
+    // console.log("in allposts", loggedUser);
+    setUserInfo(loggedUser);
+    if (loggedUser) {
+      // console.log("valid");
+      setNewPost((originalValues) => ({
+        ...originalValues,
+        userid: loggedUser.id,
+      }));
+    }
+  }, [validLogin]);
+
   const editData = (childData) => {
     setEditMode(true);
+    // console.log("line 74", childData);
     setNewPost(childData);
   };
 
   const removePost = async (e) => {
+    setCurrentPost(currentPost - 1);
     const response = await fetch(
       `http://localhost:4000/posts/${e.currentTarget.value}`,
       {
@@ -65,61 +97,16 @@ const AllPosts = ({ path }) => {
       }
     );
     await response.json();
-    setPostInfo(
-      postInfo.filter((post) => post.id !== Number(e.currentTarget.value))
+    setAllPosts(
+      allPosts.filter((post) => post.id !== Number(e.currentTarget.value))
     );
   };
 
   return (
     <div className="all-posts">
-      {postInfo === [] ? (
-        <></>
-      ) : (
-        <>
-          {
-            // eslint-disable-next-line
-            postInfo.map((post, index) => {
-              if (currentPost === index) {
-                if (post.id === newPost.id) {
-                  return (
-                    <AddPost
-                      key={index}
-                      setRefresh={setRefresh}
-                      set={set}
-                      newPost={newPost}
-                      setNewPost={setNewPost}
-                      editMode={editMode}
-                      setEditMode={setEditMode}
-                    />
-                  );
-                }
-                return (
-                  <Post
-                    key={index}
-                    post={post}
-                    setRefresh={setRefresh}
-                    removePost={removePost}
-                    editData={editData}
-                  />
-                );
-              }
-            })
-          }
-        </>
-      )}
-      {currentPost === postInfo.length ? (
-        <AddPost
-          setRefresh={setRefresh}
-          set={set}
-          setNewPost={setNewPost}
-          newPost={newPost}
-        />
-      ) : (
-        <></>
-      )}
       <div
         className="slider-buttons"
-        style={{ display: path > 0 ? "none" : "flex" }}
+        style={{ display: action !== 0 ? "none" : "flex" }}
       >
         <button
           onClick={
@@ -136,18 +123,60 @@ const AllPosts = ({ path }) => {
         </button>
         <button
           onClick={
-            currentPost === postInfo.length
+            currentPost === allPosts.length - 1
               ? () => {}
               : () => {
                   setCurrentPost(currentPost + 1);
                   setNewPost("");
                 }
           }
-          className={currentPost === postInfo.length ? "inactive" : "active"}
+          className={
+            currentPost === allPosts.length - 1 ? "inactive" : "active"
+          }
         >
           Next
         </button>
       </div>
+      {action === "addPost" ? (
+        validLogin ? (
+          <AddEditPost
+            set={set}
+            newPost={newPost}
+            setNewPost={setNewPost}
+            editMode={editMode}
+            userInfo={loggedUser}
+          />
+        ) : (
+          <>You must have an account to post.</>
+        )
+      ) : (
+        allPosts.map((post, index) => {
+          if (currentPost === index) {
+            if (post.id === newPost.id) {
+              return (
+                <AddEditPost
+                  key={index}
+                  set={set}
+                  newPost={newPost}
+                  setNewPost={setNewPost}
+                  editMode={editMode}
+                  userInfo={loggedUser}
+                />
+              );
+            } else {
+              return (
+                <Post
+                  key={index}
+                  post={post}
+                  removePost={removePost}
+                  editData={editData}
+                  userInfo={userInfo}
+                />
+              );
+            }
+          }
+        })
+      )}
     </div>
   );
 };

@@ -22,7 +22,7 @@ button {
 
 /* all posts */
 
-.all-posts, .all-users, .home-page {
+.all-posts, .all-users, .home-page, .user-posts, .other-users {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -34,18 +34,43 @@ button {
   text-align: left;
 }
 
-.post {
+.page-header {
+  color: rgb(213, 104, 104);
+  text-shadow: -2px 2px rgb(0, 0, 0);
+}
+
+.title {
+  text-shadow: -2px 1px rgb(0, 0, 0);
+}
+
+.post, .user {
   font-size: 18px;
   white-space: pre-wrap;
+  margin-bottom: 30px;
+}
+
+.user-name {
+  background-color: rgb(209, 201, 192);
+}
+
+.edit-user {
+  display: flex;
+  flex-direction: column;
 }
 
 .slider-buttons {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  margin-bottom: 30px;
 }
 
 img {
-  margin: 30px;
+  margin-left: 30px;
+  width: 400px;
+}
+
+.edit-delete {
+  float: right;
 }
 
 /* add post form */
@@ -116,6 +141,8 @@ input[type=submit]:hover, button:hover {
   display: inline-block;
   width: 200px;
   border-radius: 50%;
+  margin-right: 30px;
+  margin-top: 15px;
 }
 
 /* nav bar */
@@ -150,13 +177,13 @@ a:active {
   background-color: rgb(135, 130, 116) !important;
 }
 
-.nav-tab, .likes {
+.nav-tab, .likes, .see-more {
   background-color: rgb(179, 152, 116);
   padding: 0;
   font-size: 20px;
 }
 
-.nav-tab:hover, .likes:hover {
+.nav-tab:hover, .likes:hover, .see-more:hover {
   box-shadow: none;
   color: white;
 }
