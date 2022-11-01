@@ -1,6 +1,8 @@
 import pgPromise from "pg-promise";
+import { config } from "dotenv";
+config();
 
 const pgp = pgPromise();
-const db = pgp("postgres://localhost:5432/blog");
+const db = pgp(process.env.DB_URL);
 
 export default db;

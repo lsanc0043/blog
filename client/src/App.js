@@ -1,94 +1,123 @@
+import "bootstrap/dist/css/bootstrap.css";
 import "./App.css";
-import { useState, useEffect } from "react";
-import Post from "./components/SingularPost";
+import { useState } from "react";
+import NavBar from "./components/NavBar";
+import AllPosts from "./components/posts/AllPosts";
+import UserPage from "./components/users/UserPage";
+import UserPosts from "./components/users/UserPosts";
+import UserFaves from "./components/users/UserFaves";
+import OtherUsers from "./components/users/OtherUsers";
 
 function App() {
-  const [postInfo, setPostInfo] = useState([]);
-  const [refresh, setRefresh] = useState(0);
+  const [count, setCount] = useState(0);
+  const [currentTab, setCurrentTab] = useState("");
+  const [specificPage, setSpecificPage] = useState("");
+  const [validLogin, setValidLogin] = useState(false);
+  const [logout, setLogout] = useState(false);
+  const [loggedUser, setLoggedUser] = useState({});
+  const [user, setUser] = useState({});
 
-  const getPosts = async () => {
-    const response = await fetch("http://localhost:4000/");
-    const data = await response.json();
-    setPostInfo(data);
+  const checkLogin = (childData) => {
+    setValidLogin(childData);
   };
 
-  useEffect(() => {
-    getPosts();
-  }, [refresh, postInfo]);
-
-  const makePost = async () => {
-    const response = await fetch("http://localhost:4000/", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        poster: "Linda Sanchez",
-        title: "Title of Second Post",
-        description:
-          "Description of second post. This is the second post I've made to my blog.",
-        content:
-          "Hello all, this is the second post I will have made! Thank you for reading and supporting.",
-        image:
-          "https://i1.sndcdn.com/artworks-RdXyxcg62UePiGaW-vQHy7g-t500x500.jpg",
-      }),
-    });
-    const data = await response.json();
-    setRefresh(refresh + 1);
+  const deleteLogOut = (childData) => {
+    setLogout(childData);
   };
 
-  const editPost = async (e) => {
-    const response = await fetch(
-      `http://localhost:4000/${e.currentTarget.value}`,
-      {
-        method: "PUT",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          poster: "Sanchez Linda",
-          title: "Title of First Post",
-          description:
-            "Description of first post. This is the first post I've made to my blog.",
-          content:
-            "Hello all, this is the first post I will have made! Thank you for reading and supporting.",
-          image:
-            "https://i1.sndcdn.com/artworks-RdXyxcg62UePiGaW-vQHy7g-t500x500.jpg",
-        }),
-      }
-    );
-    const data = await response.json();
-    setRefresh(refresh + 1);
+  const getUser = (childData) => {
+    console.log(childData);
+    setUser(childData);
   };
 
-  const removePost = async (e) => {
-    const response = await fetch(
-      `http://localhost:4000/${e.currentTarget.value}`,
-      {
-        method: "DELETE",
-      }
-    );
-    await response.json();
-    setPostInfo(
-      postInfo.filter((post) => post.id !== Number(e.currentTarget.value))
-    );
+  const userInfo = (childData) => {
+    console.log(childData);
+    setLoggedUser(childData);
   };
 
   return (
     <div className="App">
-      {postInfo.map((post, index) => {
-        return (
-          <Post
-            key={index}
-            post={post}
-            makePost={makePost}
-            editPost={editPost}
-            removePost={removePost}
-          />
-        );
-      })}
+      <NavBar
+        setCount={setCount}
+        count={count}
+        setCurrentTab={setCurrentTab}
+        checkLogin={checkLogin}
+        userInfo={userInfo}
+        logout={logout}
+      />
+      {(() => {
+        switch (currentTab) {
+          case "":
+          case "Posts":
+            return (
+              <AllPosts
+                action={0}
+                validLogin={validLogin}
+                loggedUser={loggedUser}
+                setUser={setUser}
+                setCurrentTab={setCurrentTab}
+              />
+            );
+          case "Add Post":
+            return (
+              <AllPosts
+                action={"addPost"}
+                validLogin={validLogin}
+                loggedUser={loggedUser}
+                setUser={setUser}
+                setCurrentTab={setCurrentTab}
+              />
+            );
+          case "User":
+            return <UserPage loggedUser={loggedUser} logout={deleteLogOut} />;
+          case "UserPosts":
+            return (
+              <UserPosts
+                setCurrentTab={setCurrentTab}
+                setSpecificPage={setSpecificPage}
+                loggedUser={loggedUser}
+              />
+            );
+          case "UserFaves":
+            return (
+              <UserFaves
+                setCurrentTab={setCurrentTab}
+                setSpecificPage={setSpecificPage}
+                loggedUser={loggedUser}
+              />
+            );
+          case "Get a Random Post":
+            return (
+              <AllPosts
+                action={count}
+                validLogin={validLogin}
+                loggedUser={loggedUser}
+                setUser={setUser}
+                setCurrentTab={setCurrentTab}
+              />
+            );
+          case "Specific Post":
+            return (
+              <AllPosts
+                action={specificPage.toString()}
+                validLogin={validLogin}
+                loggedUser={loggedUser}
+                setUser={setUser}
+                setCurrentTab={setCurrentTab}
+              />
+            );
+          case "Other Users":
+            return (
+              <OtherUsers
+                user={user}
+                setCurrentTab={setCurrentTab}
+                setSpecificPage={setSpecificPage}
+              />
+            );
+          default:
+            return null;
+        }
+      })()}
     </div>
   );
 }
